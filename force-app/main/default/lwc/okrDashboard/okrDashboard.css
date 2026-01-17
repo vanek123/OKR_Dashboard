@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 4%;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    color: black;
+    padding-top: 20px;
+    
+}
+
+.right {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+hr {
+    width: 95%;
+    margin: auto;
+}
+
+
+

@@ -1,0 +1,47 @@
+<template>
+    <lightning-card title="OKR Dashboard" icon-name="standard:dashboard">
+        <div class="container">
+            <div class="left">
+                <p>User: </p>
+                <p>Year: </p>
+            </div>
+            <div class="right">
+                <lightning-combobox
+                    name="changeYear"
+                    label="Change year"
+                    value={value}
+                    placeholder="Select Year"
+                    options={yearOptions}
+                    onchange={handleChange} 
+                ></lightning-combobox>
+
+                <lightning-combobox
+                    name="selectUser"
+                    label="Select a user"
+                    value={value}
+                    placeholder="Select user"
+                    options={userOptions}
+                    onchange={handleChange} 
+                ></lightning-combobox>
+
+                <lightning-combobox
+                    name="createNew"
+                    label="Create"
+                    value={value}
+                    placeholder="New"
+                    options={creatingOptions}
+                    onchange={handleChange} 
+                ></lightning-combobox>
+
+            </div>
+        </div>
+
+        <hr>
+
+        <div>
+            Second block
+        </div>
+        
+    </lightning-card>
+    
+</template>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Key_Result__c</fullName>
+    <description>Master detail relationship, Key result = parent, Case Study = child</description>
+    <label>Key Result</label>
+    <referenceTo>Key_Result__c</referenceTo>
+    <relationshipLabel>Case Studies</relationshipLabel>
+    <relationshipName>Case_Studies</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>
