@@ -2,8 +2,8 @@
     <lightning-card title="OKR Dashboard" icon-name="standard:dashboard">
         <div class="top">
             <div class="left">
-                <p>User: </p>
-                <p>Year: </p>
+                <p>User: <span>{userName}</span> </p>
+                <p>Year: <span>{chosenYearForTheUser}</span> </p>
             </div>
             <div class="right">
                 <lightning-combobox
@@ -12,7 +12,8 @@
                     value={value}
                     placeholder="Select Year"
                     options={yearOptions}
-                    onchange={handleChange} 
+                    onchange={handleYearChange}
+                    dropdown-alignment="auto" 
                 ></lightning-combobox>
 
                 <lightning-combobox
@@ -21,7 +22,8 @@
                     value={value}
                     placeholder="Select user"
                     options={userOptions}
-                    onchange={handleChange} 
+                    onchange={handleUserChange}
+                    dropdown-alignment="auto"  
                 ></lightning-combobox>
 
                 <lightning-combobox
@@ -30,7 +32,8 @@
                     value={value}
                     placeholder="New"
                     options={creatingOptions}
-                    onchange={handleChange} 
+                    onchange={handleCreatingChange}
+                    dropdown-alignment="auto"  
                 ></lightning-combobox>
 
             </div>
@@ -38,11 +41,12 @@
 
         <hr>
 
+        <!-- objective containing the card with key result and target-->
         <div class="main">
             <p class="slds-text-heading_medium">New Clients</p>
             
+            <!-- card with key result and targets-->
             <div class="sub-main">
-                
                 <div class="key-result">
                     <p>Q1 Objective</p>
                 </div>
@@ -53,37 +57,20 @@
                     <p>Calls: 0/150</p>
                     <p>Contracts: 0/10</p>
                 </div>
-                
             </div>
-
+            
+            <!-- card with key result and targets-->
             <div class="sub-main">
                 
                 <div class="key-result">
                     <p>Q1 Objective</p>
                 </div>
-                
                 <div class="target">
                     <p>LinkedIn Leads: 0/50</p>
                     <p>Opportunities: 0/30</p>
                     <p>Calls: 0/150</p>
                     <p>Contracts: 0/10</p>
-                </div>
-                
-            </div>
-
-            <div class="sub-main">
-                
-                <div class="key-result">
-                    <p>Q1 Objective</p>
-                </div>
-                
-                <div class="target">
-                    <p>LinkedIn Leads: 0/50</p>
-                    <p>Opportunities: 0/30</p>
-                    <p>Calls: 0/150</p>
-                    <p>Contracts: 0/10</p>
-                </div>
-                
+                </div>  
             </div>
 
         </div>
@@ -92,4 +79,18 @@
         
     </lightning-card>
     
+    <template if:true={showObjectiveForm}>
+            <div class="popup">
+                <lightning-record-form
+                    object-api-name="Objective__c"
+                    fields={objectiveFields}
+                    record-id={objectiveRecordId}
+                    onsuccess={handleSuccess}
+                    oncancel={handleCancel}
+                    >
+                    
+                </lightning-record-form>
+            </div>      
+    </template>
+
 </template>
