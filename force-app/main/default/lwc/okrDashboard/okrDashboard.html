@@ -9,7 +9,7 @@
                 <lightning-combobox
                     name="changeYear"
                     label="Change year"
-                    value={value}
+                    value={selectedYear}
                     placeholder="Select Year"
                     options={yearOptions}
                     onchange={handleYearChange}
@@ -19,7 +19,7 @@
                 <lightning-combobox
                     name="selectUser"
                     label="Select a user"
-                    value={value}
+                    value={selectedUser}
                     placeholder="Select user"
                     options={userOptions}
                     onchange={handleUserChange}
@@ -29,7 +29,7 @@
                 <lightning-combobox
                     name="createNew"
                     label="Create"
-                    value={value}
+                    value={selectedCreationOption}
                     placeholder="New"
                     options={creatingOptions}
                     onchange={handleCreatingChange}

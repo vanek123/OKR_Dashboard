@@ -8,6 +8,9 @@ import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 
 export default class OkrDashboard extends LightningElement {
   userName;
+  selectedYear = '';
+  selectedUser = '';
+  selectedCreationOption = '';
 
   @wire(getRecord, { recordId: Id, fields: [Name] })
   userDetails({ error, data}) {
@@ -64,25 +67,27 @@ export default class OkrDashboard extends LightningElement {
 
   handleCreatingChange(event) {
     // Get the string of the "value" attribute on the selected option
-    this.value = event.detail.value;
+    this.selectedCreationOption = event.detail.value;
 
-    if (this.value === "objective") {
+    if (this.selectedCreationOption === "objective") {
       this.showObjectiveForm = true;
-    } else if (this.value === 'key result') {
+    } else if (this.selectedCreationOption === 'key result') {
       this.showKeyResultForm = true;
     }
-    else if (this.value === 'review') {
+    else if (this.selectedCreationOption === 'review') {
       this.showReviewForm = true;
     }
-    else if (this.value === 'survey') {
+    else if (this.selectedCreationOption === 'survey') {
       this.showSurveyForm = true;
     }
-    else if (this.value === 'case study') {
+    else if (this.selectedCreationOption === 'case study') {
       this.showCaseStudyForm = true;
     }
-    else if (this.value === 'google review') {
+    else if (this.selectedCreationOption === 'google review') {
       this.showGoogleReviewForm = true;
     }
+    
+    this.selectedCreateOption = '';
   }
 
   // Creating objective (form)
