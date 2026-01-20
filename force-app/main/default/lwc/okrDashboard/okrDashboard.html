@@ -29,7 +29,7 @@
                 <lightning-combobox
                     name="createNew"
                     label="Create"
-                    value={selectedCreationOption}
+                    value={value}
                     placeholder="New"
                     options={creatingOptions}
                     onchange={handleCreatingChange}
@@ -88,9 +88,17 @@
                     onsuccess={handleSuccess}
                     oncancel={handleCancel}
                     >
-                    
                 </lightning-record-form>
             </div>      
     </template>
+
+    <!-- Key Result Form Pop-up using child component keyResultForm -->
+    <template if:true={showKeyResultForm}>
+        <c-key-result-form 
+            onsave={handleKeyResultSave}
+            oncancel={handleKeyResultCancel}
+        ></c-key-result-form>
+    </template>
+    
 
 </template>

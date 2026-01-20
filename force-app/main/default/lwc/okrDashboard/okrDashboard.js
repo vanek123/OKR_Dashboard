@@ -10,7 +10,9 @@ export default class OkrDashboard extends LightningElement {
   userName;
   selectedYear = '';
   selectedUser = '';
-  selectedCreationOption = '';
+  showObjectiveForm = false;
+  showKeyResultForm = false;
+  value;
 
   @wire(getRecord, { recordId: Id, fields: [Name] })
   userDetails({ error, data}) {
@@ -62,37 +64,23 @@ export default class OkrDashboard extends LightningElement {
     }
   ];
 
-  value = "new";
-  showObjectiveForm = false;
-
   handleCreatingChange(event) {
     // Get the string of the "value" attribute on the selected option
-    this.selectedCreationOption = event.detail.value;
+    this.value = event.detail.value;
 
-    if (this.selectedCreationOption === "objective") {
+    if (this.value === "objective") {
       this.showObjectiveForm = true;
-    } else if (this.selectedCreationOption === 'key result') {
+    }
+    else if (this.value === "key result") {
       this.showKeyResultForm = true;
     }
-    else if (this.selectedCreationOption === 'review') {
-      this.showReviewForm = true;
-    }
-    else if (this.selectedCreationOption === 'survey') {
-      this.showSurveyForm = true;
-    }
-    else if (this.selectedCreationOption === 'case study') {
-      this.showCaseStudyForm = true;
-    }
-    else if (this.selectedCreationOption === 'google review') {
-      this.showGoogleReviewForm = true;
-    }
     
-    this.selectedCreateOption = '';
   }
 
   // Creating objective (form)
   @api objectiveFields = [OBJECTIVE_NAME_FIELD, YEAR_FIELD];
   @api objectiveRecordId;
+  
   
   handleSuccess(event) {
     this.showObjectiveForm = false;
@@ -110,7 +98,29 @@ export default class OkrDashboard extends LightningElement {
   handleCancel() {
     this.showObjectiveForm = false;
     this.objectiveRecordId = null;
-    this.value = ''
+    this.value = '';
+    
   }
+
+  // Cancel button on key result form
+  handleKeyResultCancel() {
+    this.showKeyResultForm = false;
+    this.value = undefined;
+  }
+
+  // Save button on key result form
+  handleKeyResultSave() {
+    this.showKeyResultForm = false;
+    this.value = undefined;
+
+    const evt = new ShowToastEvent({
+      title: 'Success',
+      message: 'The record was created successfully!',
+      variant: 'success',
+    });
+    this.dispatchEvent(evt);
+
+  }
+  
   
 }

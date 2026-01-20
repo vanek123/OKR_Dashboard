@@ -1,0 +1,14 @@
+<template>
+    <div class="popup">
+        <lightning-record-form
+            object-api-name="Key_Result__c"
+            fields={keyResultFields}
+            record-id={keyResultRecordId}
+            onsuccess={handleSuccess}
+            oncancel={handleCancel}
+            >
+                    
+        </lightning-record-form>
+    </div>      
+    
+</template>
