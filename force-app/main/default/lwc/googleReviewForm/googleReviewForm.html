@@ -1,0 +1,11 @@
+<template>
+    <div class="popup">
+        <lightning-record-form
+            object-api-name="Google_Review__c"
+            fields={googleReviewFields}
+            record-id={googleReviewRecordId}
+            onsuccess={handleSuccess}
+            oncancel={handleCancel}
+        ></lightning-record-form>
+    </div>  
+</template>

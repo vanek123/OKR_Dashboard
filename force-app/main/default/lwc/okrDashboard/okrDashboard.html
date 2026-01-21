@@ -78,18 +78,12 @@
         <hr>
         
     </lightning-card>
-    
+
     <template if:true={showObjectiveForm}>
-            <div class="popup">
-                <lightning-record-form
-                    object-api-name="Objective__c"
-                    fields={objectiveFields}
-                    record-id={objectiveRecordId}
-                    onsuccess={handleSuccess}
-                    oncancel={handleCancel}
-                    >
-                </lightning-record-form>
-            </div>      
+        <c-objective-form
+            onsave={handleObjectiveSave}
+            oncancel={handleObjectiveCancel}
+        ></c-objective-form>
     </template>
 
     <!-- Key Result Form Pop-up using child component keyResultForm -->
@@ -99,6 +93,33 @@
             oncancel={handleKeyResultCancel}
         ></c-key-result-form>
     </template>
+
+    <template if:true={showReviewForm}>
+        <c-review-form 
+            onsave={handleReviewSave}
+            oncancel={handleReviewCancel}
+        ></c-review-form>
+    </template>
+
+    <template if:true={showSurveyForm}>
+        <c-survey-form
+            onsave={handleSurveySave}
+            oncancel={handleSurveyCancel}
+        ></c-survey-form>
+    </template>
+
+    <template if:true={showCaseStudyForm}>
+        <c-case-study-form
+            onsave={handleCaseStudySave}
+            oncancel={handleCaseStudyCancel}
+        ></c-case-study-form>
+    </template>
     
+    <template if:true={showGoogleReviewForm}>
+        <c-google-review-form
+            onsave={handleGoogleReviewSave}
+            oncancel={handleGoogleReviewCancel}
+        ></c-google-review-form>
+    </template>
 
 </template>

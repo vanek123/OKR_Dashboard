@@ -12,6 +12,10 @@ export default class OkrDashboard extends LightningElement {
   selectedUser = '';
   showObjectiveForm = false;
   showKeyResultForm = false;
+  showReviewForm = false;
+  showSurveyForm = false;
+  showCaseStudyForm = false;
+  showGoogleReviewForm = false;
   value;
 
   @wire(getRecord, { recordId: Id, fields: [Name] })
@@ -74,6 +78,18 @@ export default class OkrDashboard extends LightningElement {
     else if (this.value === "key result") {
       this.showKeyResultForm = true;
     }
+    else if (this.value === "review") {
+      this.showReviewForm = true;
+    }
+    else if (this.value === "survey") {
+      this.showSurveyForm = true;
+    }
+    else if (this.value === "case study") {
+      this.showCaseStudyForm = true;
+    }
+    else if (this.value === "google review") {
+      this.showGoogleReviewForm = true;
+    }
     
   }
 
@@ -82,7 +98,7 @@ export default class OkrDashboard extends LightningElement {
   @api objectiveRecordId;
   
   
-  handleSuccess(event) {
+  handleObjectiveSave() {
     this.showObjectiveForm = false;
     this.objectiveRecordId = null;
     this.value = '';
@@ -95,7 +111,7 @@ export default class OkrDashboard extends LightningElement {
     this.dispatchEvent(evt);
   }
 
-  handleCancel() {
+  handleObjectiveCancel() {
     this.showObjectiveForm = false;
     this.objectiveRecordId = null;
     this.value = '';
@@ -121,6 +137,73 @@ export default class OkrDashboard extends LightningElement {
     this.dispatchEvent(evt);
 
   }
+
+  handleReviewCancel() {
+    this.showReviewForm = false;
+    this.value = undefined;
+  }
+
+  handleReviewSave() {
+    this.showReviewForm = false;
+    this.value = undefined;
+
+    const evt = new ShowToastEvent({
+      title: 'Success',
+      message: 'The record was created successfully!',
+      variant: 'success',
+    });
+    this.dispatchEvent(evt);
+  }
   
+  handleSurveyCancel() {
+    this.showSurveyForm = false;
+    this.value = undefined;
+  }
+
+  handleSurveySave() {
+    this.showSurveyForm = false;
+    this.value = undefined;
+
+    const evt = new ShowToastEvent({
+      title: 'Success',
+      message: 'The record was created successfully!',
+      variant: 'success',
+    });
+    this.dispatchEvent(evt);
+  }
+
+  handleCaseStudyCancel() {
+    this.showCaseStudyForm = false;
+    this.value = undefined;
+  }
+
+  handleCaseStudySave() {
+    this.showCaseStudyForm = false;
+    this.value = undefined;
+
+    const evt = new ShowToastEvent({
+      title: 'Success',
+      message: 'The record was created successfully!',
+      variant: 'success',
+    });
+    this.dispatchEvent(evt);
+  }
+
+  handleGoogleReviewCancel() {
+    this.showGoogleReviewForm = false;
+    this.value = undefined;
+  }
+
+  handleGoogleReviewSave() {
+    this.showGoogleReviewForm = false;
+    this.value = undefined;
+
+    const evt = new ShowToastEvent({
+      title: 'Success',
+      message: 'The record was created successfully!',
+      variant: 'success',
+    });
+    this.dispatchEvent(evt);
+  }
   
 }
