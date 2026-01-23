@@ -2,14 +2,35 @@
     <lightning-card title="OKR Dashboard" icon-name="standard:dashboard">
         <div class="top">
             <div class="left">
-                <p>User: <span>{userName}</span> </p>
-                <p>Year: <span>{chosenYearForTheUser}</span> </p>
+                <!--
+                <template if:true={selectedUser}>
+                    <p>User: <span>{selectedUser.Name}</span> </p>
+                    <template if:true={isYearSelected}>
+                        <p>Year: <span>{chosenYearForTheUser}</span> </p>
+                    </template>
+                    <template if:false={isYearSelected}>
+                        <p>Year: <span>{currentYear}</span> </p>
+                    </template>
+                </template>
+                
+                <template if:false={selectedUser}>
+                    <p>User: <span>{userName}</span> </p>
+                    <template if:true={isYearSelected}>
+                        <p>Year: <span>{chosenYearForTheUser}</span> </p>
+                    </template> 
+                    <template if:false={isYearSelected}>
+                    <p>Year: <span>{currentYear}</span></p>
+                    </template>
+                </template>
+                -->
+                    <p>User: <span>{selectedUser.Name}</span></p>
+                    <p>Year: <span>{chosenYearForTheUser}</span></p>
             </div>
             <div class="right">
                 <lightning-combobox
                     name="changeYear"
                     label="Change year"
-                    value={selectedYear}
+                    value={yearValue}
                     placeholder="Select Year"
                     options={yearOptions}
                     onchange={handleYearChange}
@@ -19,7 +40,7 @@
                 <lightning-combobox
                     name="selectUser"
                     label="Select a user"
-                    value={selectedUser}
+                    value={userValue}
                     placeholder="Select user"
                     options={userOptions}
                     onchange={handleUserChange}
@@ -38,14 +59,12 @@
 
             </div>
         </div>
-
-        <hr>
-
+        
         <!-- objective containing the card with key result and target-->
-        <div class="main">
+        <!--<div class="main">
             <p class="slds-text-heading_medium">New Clients</p>
             
-            <!-- card with key result and targets-->
+            
             <div class="sub-main">
                 <div class="key-result">
                     <p>Q1 Objective</p>
@@ -59,7 +78,7 @@
                 </div>
             </div>
             
-            <!-- card with key result and targets-->
+            
             <div class="sub-main">
                 
                 <div class="key-result">
@@ -73,9 +92,39 @@
                 </div>  
             </div>
 
-        </div>
+        </div>-->
 
-        <hr>
+        <template if:true={isYearSelected}>
+            <template if:true={hasObjectives}>
+                <template for:each={objectives} for:item="obj">
+                    <hr key={obj.Id}>
+                    <div key={obj.Id} class="main">
+                        <p class="slds-text-heading_medium">{obj.Name}</p>
+                        <p> {obj.Year__c}</p>
+                        <div class="sub-main">
+                            <div class="key-result">
+                                <p>Q1 Objective</p>
+                            </div>
+                
+                            <div class="target">
+                                <p>LinkedIn Leads: 0/50</p>
+                                <p>Opportunities: 0/30</p>
+                                <p>Calls: 0/150</p>
+                                <p>Contracts: 0/10</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <template if:false={hasObjectives}>
+                <div class="noObjectives">
+                    <hr>
+                    <p class="">There are no objectives for selected year.</p>
+                </div>
+            </template>
+        </template>
+        
         
     </lightning-card>
 
