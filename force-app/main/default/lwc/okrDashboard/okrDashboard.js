@@ -5,11 +5,14 @@ import Id from '@salesforce/user/Id';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 import GET_OBJECTIVES from '@salesforce/apex/okrDashboardController.getObjectives';
 import GET_USERS from '@salesforce/apex/okrDashboardController.getUsers';
+import GET_KEY_RESULTS from '@salesforce/apex/okrDashboardController.getKeyResults';
+import { refreshApex } from '@salesforce/apex';
 
 export default class OkrDashboard extends LightningElement {
   userName;
   showObjectiveForm = false;
   objectives = [];
+  keyResults = [];
   showKeyResultForm = false;
   showReviewForm = false;
   showSurveyForm = false;
@@ -17,26 +20,29 @@ export default class OkrDashboard extends LightningElement {
   showGoogleReviewForm = false;
   showObjectiveItself = false;
   value;
-  chosenYearForTheUser;
   yearValue;
   yearOptions = [];
   userValue;
+  selectedUserId;
 
   @track userData;
   @track userOptions = [];
-  @track selectedUser;
+  currentYear = new Date().getFullYear();
 
   connectedCallback() {
+    
     for (let i = this.currentYear - 3; i <= this.currentYear + 3; i++) {
       this.yearOptions.push({ label: i.toString(), value: i.toString() }); 
     }
-
-    this.userValue = Id;
     
     this.yearValue = this.currentYear.toString();
-    this.chosenYearForTheUser = this.currentYear.toString();
-    this.selectedUser = { Id: Id, Name: this.userName };
-    this.getObjectives(); 
+    this.selectedUserId = Id;
+    this.userValue = Id;
+     
+  }
+  
+  get chosenYear() {
+    return this.yearValue ? parseInt(this.yearValue, 10) : null;
   }
 
   // Get all users from apex controller 
@@ -59,9 +65,7 @@ export default class OkrDashboard extends LightningElement {
   // Choose user from combobox
   handleUserChange(event) {
     this.userValue = event.detail.value; 
-    this.selectedUser = this.userData.filter(user => user.Id === event.detail.value)[0];
-    
-    this.getObjectives();
+    this.selectedUserId = event.detail.value;
   }
 
 
@@ -76,43 +80,46 @@ export default class OkrDashboard extends LightningElement {
     }
   }
   
-  currentYear = new Date().getFullYear();
-  chosenYearToString = parseInt(this.chosenYearForTheUser, 10);
-  
   @wire(GET_OBJECTIVES, { 
-    year: '$chosenYearToString', 
-    userId: '$selectedUser.Id' 
+    year: '$chosenYear', 
+    userId: '$selectedUserId' 
   })
-  wiredObjectives({ error, result}) {
+  wiredObjectives(value) {
+    this.wiredObjectivesResult = value;
+    
+    const { data, error} = value;
     if (error) {
       this.error = error;
-      console.error(result.error);
-    } else if (result.data) {
-      this.objectives = result.data;
+      console.error(error);
+    } else if (data) {
+      this.objectives = data;
     }
-  } 
+  }
+
+  refreshObjectives() {
+    refreshApex(this.wiredObjectivesResult);
+  }
+  
+  @wire(GET_KEY_RESULTS, { 
+    objectiveId: ''
+  })
+  wiredKeyResults({ error, data}) {
+    if (error) {
+      this.error = error;
+      console.error(error);
+    } else if (data) {
+      this.keyResults = data;}
+  }
 
   handleYearChange(event) {
     this.yearValue = event.detail.value;
-    this.chosenYearForTheUser = this.yearValue;
 
-    this.getObjectives();
   }
 
-  /*async getObjectives() {
-    
-    await GET_OBJECTIVES({ 
-      year: parseInt(this.chosenYearForTheUser, 10),
-      userId: this.selectedUser.Id
-     })
-      .then((result) => {
-        this.objectives = result;
-        console.log('Objectives ::: ' + JSON.stringify(this.objectives));
-      })
-      .catch(error => {
-        console.log('Error ::: ' + error);
-      })
-  }*/
+  get displayedUserName() {
+    const selected = this.userOptions.find(u => u.value === this.selectedUserId);
+    return selected ? selected.label : this.userName;
+  }
 
   get hasObjectives() {
     if (this.objectives.length > 0) {
@@ -124,7 +131,7 @@ export default class OkrDashboard extends LightningElement {
   }
 
   get isYearSelected() {
-    if (this.chosenYearForTheUser) {
+    if (this.yearValue) {
       return true;
     }
     return false;
@@ -198,7 +205,9 @@ export default class OkrDashboard extends LightningElement {
     this.showObjectiveForm = false;
     this.objectiveRecordId = null;
     this.value = '';
-    this.getObjectives();
+    //this.getObjectives();
+
+    this.refreshObjectives();
 
     const evt = new ShowToastEvent({
       title: 'Success',
@@ -206,6 +215,8 @@ export default class OkrDashboard extends LightningElement {
       variant: 'success',
     });
     this.dispatchEvent(evt);
+
+
   }
 
   handleObjectiveCancel() {
