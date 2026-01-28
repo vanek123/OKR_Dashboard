@@ -1,0 +1,16 @@
+.sub-main {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 3px;
+    margin-left: 2%;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.key-result {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid gray;
+    padding-bottom: 10px;
+}

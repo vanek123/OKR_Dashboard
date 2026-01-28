@@ -101,7 +101,21 @@
                     <div key={obj.Id} class="main">
                         <p class="slds-text-heading_medium">{obj.Name}</p>
                         <p> {obj.Year__c}</p>
-                        <div class="sub-main">
+                        <template if:true={obj.Key_Results__r}>
+                            <template for:each={obj.Key_Results__r} for:item="keyResult">
+                                <c-key-result-child
+                                    key-result={keyResult}
+                                    key={keyResult.Id}
+                                ></c-key-result-child>
+                            </template>
+                            
+                        </template>
+                        <template if:false={obj.Key_Results__r}>
+                                <div class="slds-text-color_weak slds-m-top_small">
+                                    <p>There are no key results for this objective.</p>
+                                </div>
+                        </template>
+                        <!--<div class="sub-main">
                             <div class="key-result">
                                 <p>Q1 Objective</p>
                             </div>
@@ -112,7 +126,7 @@
                                 <p>Calls: 0/150</p>
                                 <p>Contracts: 0/10</p>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </template>
             </template>

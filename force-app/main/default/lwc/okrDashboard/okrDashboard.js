@@ -1,11 +1,10 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
 import Name from '@salesforce/schema/User.Name';
 import Id from '@salesforce/user/Id';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 import GET_OBJECTIVES from '@salesforce/apex/okrDashboardController.getObjectives';
 import GET_USERS from '@salesforce/apex/okrDashboardController.getUsers';
-import GET_KEY_RESULTS from '@salesforce/apex/okrDashboardController.getKeyResults';
 import { refreshApex } from '@salesforce/apex';
 
 export default class OkrDashboard extends LightningElement {
@@ -24,6 +23,9 @@ export default class OkrDashboard extends LightningElement {
   yearOptions = [];
   userValue;
   selectedUserId;
+  krId;
+  startDate;
+  endDate;
 
   @track userData;
   @track userOptions = [];
@@ -93,27 +95,18 @@ export default class OkrDashboard extends LightningElement {
       console.error(error);
     } else if (data) {
       this.objectives = data;
+      //this.objectiveIds = data.map((objective) => objective.Id);
     }
   }
 
   refreshObjectives() {
     refreshApex(this.wiredObjectivesResult);
   }
-  
-  @wire(GET_KEY_RESULTS, { 
-    objectiveId: ''
-  })
-  wiredKeyResults({ error, data}) {
-    if (error) {
-      this.error = error;
-      console.error(error);
-    } else if (data) {
-      this.keyResults = data;}
-  }
 
   handleYearChange(event) {
     this.yearValue = event.detail.value;
 
+    refreshApex(this.wiredObjectivesResult);
   }
 
   get displayedUserName() {
@@ -236,6 +229,8 @@ export default class OkrDashboard extends LightningElement {
   handleKeyResultSave() { 
     this.showKeyResultForm = false;
     this.value = undefined;
+
+    refreshApex(this.wiredObjectivesResult);
 
     const evt = new ShowToastEvent({
       title: 'Success',
