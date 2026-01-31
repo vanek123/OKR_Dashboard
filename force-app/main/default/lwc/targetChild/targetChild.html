@@ -1,8 +1,23 @@
 <template>
+    
     <div class="target">
-        <p>LinkedIn Leads: 0/50</p>
-        <p>Opportunities: 0/30</p>
-        <p>Calls: 0/150</p>
-        <p>Contracts: 0/10</p>
-    </div> 
+        <template if:true={hasTargets}>
+            <template for:each={targets} for:item="t">
+                <p key={t.Id}>{t.Type__c}: 0 / {t.Target_Number__c}</p>
+            </template>
+        </template>
+
+        <template if:false={hasTargets}>
+            <p>No targets added yet.</p>
+        </template>
+        
+        <button onclick={handleTargetPopup}>Add Target</button>
+    </div>
+    
+    <c-target-form
+        if:true={showTargetForm}
+        key-result-id={keyResultId}
+        ontargetcancel={handleTargetCancel}
+        ontargetsave={handleTargetSave}
+    ></c-target-form>
 </template>

@@ -103,10 +103,12 @@
                         <p> {obj.Year__c}</p>
                         <template if:true={obj.Key_Results__r}>
                             <template for:each={obj.Key_Results__r} for:item="keyResult">
-                                <c-key-result-child
-                                    key-result={keyResult}
-                                    key={keyResult.Id}
-                                ></c-key-result-child>
+                                <div class="sub-main" key={keyResult.Id}>
+                                    <c-key-result-child
+                                        key-result={keyResult}>
+                                    </c-key-result-child>
+                                </div>
+                                
                             </template>
                             
                         </template>
@@ -183,6 +185,13 @@
             onsave={handleGoogleReviewSave}
             oncancel={handleGoogleReviewCancel}
         ></c-google-review-form>
+    </template>
+
+    <template if:true={showTargetForm}>
+        <c-target-form
+            onsave={handleTargetSave}
+            oncacnel={handleTargetCancel}
+        ></c-target-form>
     </template>
 
 </template>

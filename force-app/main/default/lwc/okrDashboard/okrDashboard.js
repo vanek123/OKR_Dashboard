@@ -11,7 +11,6 @@ export default class OkrDashboard extends LightningElement {
   userName;
   showObjectiveForm = false;
   objectives = [];
-  keyResults = [];
   showKeyResultForm = false;
   showReviewForm = false;
   showSurveyForm = false;

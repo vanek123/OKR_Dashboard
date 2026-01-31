@@ -1,8 +1,9 @@
 <template>
-    <div class="sub-main">
         <div class="key-result">
             <p>{keyResult.Name}</p>
         </div>
-                
-    </div>
+
+        <c-target-child
+            key-result-id={keyResult.Id}
+        ></c-target-child>
 </template>

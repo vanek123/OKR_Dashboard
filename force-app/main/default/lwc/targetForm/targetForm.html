@@ -1,0 +1,42 @@
+<template>
+    <div class="popup"> 
+
+        <lightning-input
+            type="text"
+            label="Key Result"
+            value={keyResultName}
+            disabled>
+        </lightning-input>
+
+        <lightning-combobox
+            label="Target Type"
+            data-id="type"
+            value={type}
+            options={typeOptions}
+            onchange={handleTypeChange}>
+        </lightning-combobox>
+
+        <template if:true={isContract}>
+            <lightning-combobox
+                label="Contract Type"
+                data-id="contractType"
+                value={contractType}
+                options={contractTypeOptions}
+                onchange={handleContractTypeChange}
+                required={isContract}>
+            </lightning-combobox>
+        </template>
+
+        <lightning-input
+            type="number"
+            data-id="targetNumber"
+            label="Target Number"
+            value={targetNumber}
+            onchange={handleTargetNumberChange}>
+        </lightning-input>
+
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+        <lightning-button label="Save" onclick={handleSave}></lightning-button>
+        
+    </div>
+</template>
