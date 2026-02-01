@@ -3,7 +3,7 @@
     <div class="target">
         <template if:true={hasTargets}>
             <template for:each={targets} for:item="t">
-                <p key={t.Id}>{t.Type__c}: 0 / {t.Target_Number__c}</p>
+                <p key={t.Id}>{t.Type__c}: {t.Current_Number__c} / {t.Target_Number__c}</p>
             </template>
         </template>
 

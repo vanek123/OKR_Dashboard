@@ -12,7 +12,7 @@ export default class TargetChild extends LightningElement {
     @wire(GET_TARGETS, { 
         keyResultId: '$keyResultId'
     })
-    wiredObjectives(value) {
+    wiredTargetRecords(value) {
         this.wiredTargets = value;
         
         const { data, error} = value;
@@ -51,10 +51,10 @@ export default class TargetChild extends LightningElement {
             targetNumber
         })
         .then(() => {
-            this.showTargetForm = false;
-            refreshApex(this.wiredTargets);
+            return refreshApex(this.wiredTargets);
         })
         .then(() => {
+            this.showTargetForm = false;
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',

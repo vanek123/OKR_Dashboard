@@ -208,7 +208,6 @@ export default class OkrDashboard extends LightningElement {
     });
     this.dispatchEvent(evt);
 
-
   }
 
   handleObjectiveCancel() {
@@ -265,6 +264,7 @@ export default class OkrDashboard extends LightningElement {
   handleSurveySave() {
     this.showSurveyForm = false;
     this.value = undefined;
+
 
     const evt = new ShowToastEvent({
       title: 'Success',

@@ -27,115 +27,57 @@ public with sharing class okrDashboardController {
     @AuraEnabled(cacheable=true)
     public static List<Target__c> getTargets(Id keyResultId) {
         try {
-            return [SELECT Id, Type__c, Target_Number__c
+            List<Target__c> targets = [SELECT Id, Type__c, Target_Number__c, Current_Number__c
                     FROM Target__c
                     WHERE Key_Result__c =: keyResultId];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
 
-    // Count of Calls for a target
-    @AuraEnabled(cacheable=true)
-    public static Integer getCallCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Task
-                    WHERE Key_Result__c =: keyResultId
-                    AND TaskSubtype = 'Call'];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
+            for (Target__c t : targets) {
+                Integer count = 0;
 
-    // Count of Events for a target
-    @AuraEnabled(cacheable=true)
-    public static Integer getEventCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Event
-                    WHERE Key_Result__c =: keyResultId];
+                switch on t.Type__c {
+                when 'Calls' {
+                    count = [SELECT COUNT() FROM Task
+                            WHERE WhatId =: keyResultId
+                            AND TaskSubtype = 'Call'];
+                }
+                when 'Events' {
+                    count = [SELECT COUNT() FROM Event 
+                            WHERE WhatId = :keyResultId];
+                }
+                when 'Contracts' {
+                    count = [SELECT COUNT() FROM Contract
+                            WHERE Key_Result__c = :keyResultId
+                            AND Contract_Type__c = :t.Contract_Type__c]; 
+                }
+                when 'Leads' {
+                    count = [SELECT COUNT() FROM Lead
+                            WHERE LeadSource = 'Web'
+                            AND Key_Result__c =: keyResultId];
+                }
+                when 'Surveys' {
+                    count = [SELECT COUNT() FROM Survey__c
+                            WHERE Key_Result__c = :keyResultId];
+                }
+                when 'Reviews' {
+                    count = [SELECT COUNT() FROM Review__c
+                            WHERE Key_Result__c = :keyResultId];
+                }
+                when 'Google Reviews' {
+                    count = [SELECT COUNT() FROM Google_Review__c
+                            WHERE Key_Result__c = :keyResultId];
+                }
+                when 'Case Studies' {
+                    count = [SELECT COUNT() FROM Case_Study__c
+                            WHERE Key_Result__c = :keyResultId];
+                }
+                when 'Opportunities' {
+                    count = [SELECT COUNT() FROM Opportunity
+                            WHERE Key_Result__c = :keyResultId];
+                }
+            }
+            t.Current_Number__c = count;
         }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
-    // Count of Opportunities for a target
-    @AuraEnabled(cacheable=true)
-    public static Integer getOpportunityCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Opportunity
-                    WHERE Key_Result__c =: keyResultId];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
-    // Count of Leads(only from web) for a target
-    @AuraEnabled(cacheable=true)
-    public static Integer getLeadCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Lead
-                    WHERE LeadSource = 'Web'
-                    AND Key_Result__c =: keyResultId];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    
-    }
-
-    // Count of Surveys for a target
-    public static Integer getSurveyCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Survey__c
-                    WHERE Key_Result__c =: keyResultId];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
-    // Count of Reviews for a target
-    public static Integer getReviewCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Review__c
-                    WHERE Key_Result__c =: keyResultId];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
-    // Count of Google Reviews for a target
-    public static Integer getGoogleReviewCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Google_Review__c
-                    WHERE Key_Result__c =: keyResultId];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
-    // Count of Case Studies for a target
-    public static Integer getCaseStudiesCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Case_Study__c
-                    WHERE Key_Result__c =: keyResultId];
-        }
-        catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
-    // Count of Contracts for a target
-    public static Integer getContractCountForKeyResult(Id keyResultId) {
-        try {
-            return [SELECT COUNT() FROM Contract
-                    WHERE Key_Result__c =: keyResultId];
+            return targets;
         }
         catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
@@ -163,4 +105,5 @@ public with sharing class okrDashboardController {
 
         } 
     }
+
 }
