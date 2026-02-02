@@ -2,27 +2,6 @@
     <lightning-card title="OKR Dashboard" icon-name="standard:dashboard">
         <div class="top">
             <div class="left">
-                <!--
-                <template if:true={selectedUser}>
-                    <p>User: <span>{selectedUser.Name}</span> </p>
-                    <template if:true={isYearSelected}>
-                        <p>Year: <span>{chosenYearForTheUser}</span> </p>
-                    </template>
-                    <template if:false={isYearSelected}>
-                        <p>Year: <span>{currentYear}</span> </p>
-                    </template>
-                </template>
-                
-                <template if:false={selectedUser}>
-                    <p>User: <span>{userName}</span> </p>
-                    <template if:true={isYearSelected}>
-                        <p>Year: <span>{chosenYearForTheUser}</span> </p>
-                    </template> 
-                    <template if:false={isYearSelected}>
-                    <p>Year: <span>{currentYear}</span></p>
-                    </template>
-                </template>
-                -->
                     <p>User: <span>{displayedUserName}</span></p>
                     <p>Year: <span>{yearValue}</span></p>
             </div>
@@ -59,40 +38,6 @@
 
             </div>
         </div>
-        
-        <!-- objective containing the card with key result and target-->
-        <!--<div class="main">
-            <p class="slds-text-heading_medium">New Clients</p>
-            
-            
-            <div class="sub-main">
-                <div class="key-result">
-                    <p>Q1 Objective</p>
-                </div>
-                
-                <div class="target">
-                    <p>LinkedIn Leads: 0/50</p>
-                    <p>Opportunities: 0/30</p>
-                    <p>Calls: 0/150</p>
-                    <p>Contracts: 0/10</p>
-                </div>
-            </div>
-            
-            
-            <div class="sub-main">
-                
-                <div class="key-result">
-                    <p>Q1 Objective</p>
-                </div>
-                <div class="target">
-                    <p>LinkedIn Leads: 0/50</p>
-                    <p>Opportunities: 0/30</p>
-                    <p>Calls: 0/150</p>
-                    <p>Contracts: 0/10</p>
-                </div>  
-            </div>
-
-        </div>-->
 
         <template if:true={isYearSelected}>
             <template if:true={hasObjectives}>
@@ -117,18 +62,6 @@
                                     <p>There are no key results for this objective.</p>
                                 </div>
                         </template>
-                        <!--<div class="sub-main">
-                            <div class="key-result">
-                                <p>Q1 Objective</p>
-                            </div>
-                
-                            <div class="target">
-                                <p>LinkedIn Leads: 0/50</p>
-                                <p>Opportunities: 0/30</p>
-                                <p>Calls: 0/150</p>
-                                <p>Contracts: 0/10</p>
-                            </div>
-                        </div>-->
                     </div>
                 </template>
             </template>

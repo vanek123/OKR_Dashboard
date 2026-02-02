@@ -27,7 +27,12 @@ public with sharing class okrDashboardController {
     @AuraEnabled(cacheable=true)
     public static List<Target__c> getTargets(Id keyResultId) {
         try {
-            List<Target__c> targets = [SELECT Id, Type__c, Target_Number__c, Current_Number__c
+            List<Target__c> targets = [
+                    SELECT Id, 
+                    Type__c, 
+                    Target_Number__c, 
+                    Current_Number__c,
+                    Contract_Type__c
                     FROM Target__c
                     WHERE Key_Result__c =: keyResultId];
 

@@ -18,6 +18,8 @@ export default class TargetForm extends LightningElement {
 
     keyResultName;
 
+    @api targets;
+
     @wire(getObjectInfo, { objectApiName: TARGET_OBJECT })
     objectInfo;
 
@@ -107,6 +109,20 @@ export default class TargetForm extends LightningElement {
         if (!this.targetNumber) {
             numberInput.setCustomValidity('Please enter a target number');
             isValid = false;
+        }
+
+        if (this.isContract) {
+            // Для контрактов: дубликат по Type + Contract_Type
+            if (this.targets.some(t => t.Type__c === this.type && t.Contract_Type__c === this.contractType)) {
+                contractTypeInput.setCustomValidity('A target with this contract type already exists for this Key Result');
+                isValid = false;
+            }
+        } else {
+            // Для остальных типов: дубликат по Type
+            if (this.targets.some(t => t.Type__c === this.type)) {
+                typeInput.setCustomValidity('A target of this type already exists for this Key Result');
+                isValid = false;
+            }
         }
 
         typeInput.reportValidity();
