@@ -1,17 +1,84 @@
-import { LightningElement } from 'lwc';
-import NAME from '@salesforce/schema/Case_Study__c.Name';
-import KEY_RESULT from '@salesforce/schema/Case_Study__c.Key_Result__c';
+import { LightningElement, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import createCaseStudy from '@salesforce/apex/okrDashboardController.createCaseStudy';
 
 export default class CaseStudyForm extends LightningElement {
-    caseStudyFields = [KEY_RESULT, NAME];
-    caseStudyRecordId;
 
-    handleCancel() {
+    @api selectedUserId;
+    caseStudyName;
+    keyResultId;
+
+    get keyResultFilter() {
+
+        if (!this.selectedUserId) {
+            return null;
+        }
+
+        return {
+            criteria: [
+                {
+                    fieldPath: 'Objective__r.OwnerId',
+                    operator: 'eq',
+                    value: this.selectedUserId
+                },
+            ]
+        }
+        
+    }
+
+    handleCaseStudyNameChange(event) {
+        this.caseStudyName = event.target.value;
+    }
+
+    handleCaseStudyKRChange(event) {
+        this.keyResultId = event.detail.recordId;
+    }
+
+    handleCaseStudyCancel() {
         this.dispatchEvent(new CustomEvent('cancel'));
     }
 
-    handleSuccess() {
-        this.dispatchEvent(new CustomEvent('save'));
+    handleCaseStudySave() {
+        const caseStudyKRPicker = this.template.querySelector('[data-id="case-study-kr-picker"]');
+        const caseStudyNameInput = this.template.querySelector('[data-id="case-study-name-input"]');
+
+        caseStudyKRPicker.setCustomValidity('');
+        caseStudyNameInput.setCustomValidity('');
+
+        let isValid = true;
+
+        if (!this.keyResultId) {
+            caseStudyKRPicker.setCustomValidity('Please select a Key Result');
+            isValid = false;
+        }
+
+        if (!this.caseStudyName || !this.caseStudyName.trim()) {
+            caseStudyNameInput.setCustomValidity('Please enter a case study name.');
+            isValid = false;
+        }
+
+        caseStudyKRPicker.reportValidity();
+        caseStudyNameInput.reportValidity();
+
+        if (!isValid) {
+            return;
+        }
+
+        createCaseStudy({
+            keyResultId: this.keyResultId,
+            caseStudyName: this.caseStudyName
+        }).then(() => {
+            this.dispatchEvent(new CustomEvent('save', { bubbles: true }));
+        })
+        .catch(error => {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    message: error.body?.message || 'Failed to create Case Study',
+                    variant: 'error'
+                })
+            );
+        });
     }
     
 }

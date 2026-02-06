@@ -1,18 +1,24 @@
 <template>
     <div class="popup">
-        <lightning-record-form
-            object-api-name="Objective__c"
-            fields={objectiveFields}
-            record-id={objectiveRecordId}
-            onsuccess={handleSuccess}
-            oncancel={handleCancel}
-        >
-    
-            <lightning-input-field
-            field-name="Objective Name"
+
+        <lightning-input
+            label="Objective Name"
+            data-id="objective-name"
+            value={objectiveName}
+            onchange={handleObjNameChange}
             required
-            >    
-            </lightning-input-field>
-        </lightning-record-form>
+        ></lightning-input>
+
+        <lightning-input
+            label="Year"
+            data-id="objective-year"
+            value={objectiveYear}
+            type="number"
+            onchange={handleObjYearChange}
+            required
+        ></lightning-input>
+
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+        <lightning-button label="Save" onclick={handleSave}></lightning-button>
     </div>
 </template>

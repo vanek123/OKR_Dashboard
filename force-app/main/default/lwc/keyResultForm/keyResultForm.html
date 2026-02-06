@@ -1,13 +1,24 @@
 <template>
     <div class="popup">
-        <lightning-record-form
-            object-api-name="Key_Result__c"
-            fields={keyResultFields}
-            record-id={keyResultRecordId}
-            onsuccess={handleSuccess}
-            oncancel={handleCancel}
-            >
-                    
-        </lightning-record-form>
+        <lightning-record-picker
+            data-id="obj-picker"
+            label="Objective"
+            object-api-name="Objective__c"
+            filter={objectiveFilter}
+            onchange={handleObjectiveChange}
+            required
+        ></lightning-record-picker>
+
+        <lightning-input
+            data-id="kr-name-input"
+            label="Key Result Name"
+            value={keyResultName}
+            onchange={handleKRNameChange}
+            required
+        ></lightning-input>
+
+        <lightning-button label="Cancel" onclick={handleKRCancel}></lightning-button>
+        <lightning-button label="Save" onclick={handleKRSave}></lightning-button>
+
     </div>      
 </template>

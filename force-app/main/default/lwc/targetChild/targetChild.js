@@ -33,6 +33,30 @@ export default class TargetChild extends LightningElement {
         }
     }
 
+    get keyResultStatus() {
+        if (!this.targets || this.targets.length === 0) {
+            return 'Not Started';
+        }
+
+        const allTargetsDone = this.targets.every(t =>
+            (t.Current_Number__c || 0) >= (t.Target_Number__c || 0)
+        );
+
+        if (allTargetsDone) {
+            return 'Done';
+        }
+
+        const anyProgress = this.targets.some(t =>
+            (t.Current_Number__c || 0) > 0
+        );
+
+        if (anyProgress) {
+            return 'In Progress';
+        }
+
+        return 'Not Started';
+    }
+
     handleTargetPopup() {
         this.showTargetForm = true;
     }

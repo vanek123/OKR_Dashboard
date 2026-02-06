@@ -1,6 +1,7 @@
 <template>
     
     <div class="target">
+        <p class="status">Status: {keyResultStatus} </p>
         <template if:true={hasTargets}>
             <template for:each={targets} for:item="t">
                 <p key={t.Id}>{t.Type__c}: {t.Current_Number__c} / {t.Target_Number__c}</p>

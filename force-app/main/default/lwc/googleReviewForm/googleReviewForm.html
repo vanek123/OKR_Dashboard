@@ -1,11 +1,25 @@
 <template>
     <div class="popup">
-        <lightning-record-form
-            object-api-name="Google_Review__c"
-            fields={googleReviewFields}
-            record-id={googleReviewRecordId}
-            onsuccess={handleSuccess}
-            oncancel={handleCancel}
-        ></lightning-record-form>
+
+        <lightning-record-picker
+            data-id="google-review-kr-picker"
+            label="Key Result"
+            object-api-name="Key_Result__c"
+            filter={keyResultFilter}
+            onchange={handleGoogleReviewKRChange}
+            required
+        ></lightning-record-picker>
+
+        <lightning-input
+            data-id="google-review-name-input"
+            label="Google Review Name"
+            value={googleReviewName}
+            onchange={handleGoogleReviewNameChange}
+            required
+        ></lightning-input>
+
+        <lightning-button label="Cancel" onclick={handleGoogleReviewCancel}></lightning-button>
+        <lightning-button label="Save" onclick={handleGoogleReviewSave}></lightning-button>
+
     </div>  
 </template>

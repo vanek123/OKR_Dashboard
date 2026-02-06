@@ -1,12 +1,25 @@
 <template>
     <div class="popup">
-        <lightning-record-form
-            object-api-name="Survey__c"
-            fields={surveyFields}
-            record-id={surveyRecordId}
-            onsuccess={handleSuccess}
-            oncancel={handleCancel}
-            >   
-        </lightning-record-form>
+
+        <lightning-record-picker
+            data-id="survey-kr-picker"
+            label="Key Result"
+            object-api-name="Key_Result__c"
+            filter={keyResultFilter}
+            onchange={handleSurveyKRChange}
+            required
+        ></lightning-record-picker>
+
+        <lightning-input
+            data-id="survey-name-input"
+            label="Survey Name"
+            value={surveyName}
+            onchange={handleSurveyNameChange}
+            required
+        ></lightning-input>
+
+        <lightning-button label="Cancel" onclick={handleSurveyCancel}></lightning-button>
+        <lightning-button label="Save" onclick={handleSurveySave}></lightning-button>
+
     </div>  
 </template>

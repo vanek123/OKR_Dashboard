@@ -18,11 +18,11 @@ export default class OkrDashboard extends LightningElement {
   showGoogleReviewForm = false;
   showObjectiveItself = false;
   value;
+  krId;
   yearValue;
   yearOptions = [];
   userValue;
   selectedUserId;
-  krId;
   startDate;
   endDate;
 
@@ -197,8 +197,6 @@ export default class OkrDashboard extends LightningElement {
     this.showObjectiveForm = false;
     this.objectiveRecordId = null;
     this.value = '';
-    //this.getObjectives();
-
     this.refreshObjectives();
 
     const evt = new ShowToastEvent({
@@ -207,7 +205,7 @@ export default class OkrDashboard extends LightningElement {
       variant: 'success',
     });
     this.dispatchEvent(evt);
-
+    
   }
 
   handleObjectiveCancel() {

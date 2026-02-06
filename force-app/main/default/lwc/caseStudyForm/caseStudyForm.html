@@ -1,12 +1,25 @@
 <template>
     <div class="popup">
-        <lightning-record-form
-            object-api-name="Case_Study__c"
-            fields={caseStudyFields}
-            record-id={caseStudyRecordId}
-            onsuccess={handleSuccess}
-            oncancel={handleCancel}
-            >       
-        </lightning-record-form>
+
+        <lightning-record-picker
+            data-id="case-study-kr-picker"
+            label="Key Result"
+            object-api-name="Key_Result__c"
+            filter={keyResultFilter}
+            onchange={handleCaseStudyKRChange}
+            required
+        ></lightning-record-picker>
+
+        <lightning-input
+            data-id="case-study-name-input"
+            label="Case Study Name"
+            value={caseStudyName}
+            onchange={handleCaseStudyNameChange}
+            required
+        ></lightning-input>
+
+        <lightning-button label="Cancel" onclick={handleCaseStudyCancel}></lightning-button>
+        <lightning-button label="Save" onclick={handleCaseStudySave}></lightning-button>
+
     </div>     
 </template>
