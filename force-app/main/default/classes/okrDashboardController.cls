@@ -54,7 +54,7 @@ public with sharing class okrDashboardController {
                             WHERE Key_Result__c = :keyResultId
                             AND Contract_Type__c = :t.Contract_Type__c]; 
                 }
-                when 'Leads' {
+                when 'Web Leads' {
                     count = [SELECT COUNT() FROM Lead
                             WHERE LeadSource = 'Web'
                             AND Key_Result__c =: keyResultId];
@@ -120,13 +120,13 @@ public with sharing class okrDashboardController {
                 FROM Objective__c
                 WHERE Name = :objectiveName
                 AND Year__c = :year
+                AND OwnerId = :ownerId
                 LIMIT 1
             ];
 
             if (!existing.isEmpty()) {
                 throw new AuraHandledException('An objective with this name already exists for this user and year.');
             }
-            
 
             Objective__c objective = new Objective__c(
                 Name = objectiveName,

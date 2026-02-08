@@ -1,4 +1,4 @@
-import { LightningElement, wire, track, api } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
 import Name from '@salesforce/schema/User.Name';
 import Id from '@salesforce/user/Id';
@@ -94,7 +94,6 @@ export default class OkrDashboard extends LightningElement {
       console.error(error);
     } else if (data) {
       this.objectives = data;
-      //this.objectiveIds = data.map((objective) => objective.Id);
     }
   }
 
