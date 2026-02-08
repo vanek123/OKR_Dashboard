@@ -22,25 +22,39 @@
 @isTest
 private class okrDashboardControllerTest {
 
-    // getObjectives test method
-    @isTest
-    static void getObjectivesTest() {
-        User user = [SELECT Id FROM User LIMIT 1];
-
+    @testSetup
+    static void setupData(){
         Objective__c obj = new Objective__c(
             Name = 'Test Objective',
             Year__c = 2026,
-            OwnerId = user.Id
+            OwnerId = UserInfo.getUserId()
         );
-
         insert obj;
 
         Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
+            Name = 'Test Key Result',
+            Objective__c = obj.Id
         );
+        insert keyResult;
+    }
 
-        insert keyResult;        
+    // Helper method to get objective
+    private static Objective__c getObj() {
+        return [SELECT Id, Name FROM Objective__c LIMIT 1];
+    }
+
+    // Helper method to get key result
+    private static Key_Result__c getKR() {
+        return [SELECT Id, Name, Objective__c FROM Key_Result__c LIMIT 1];
+    }
+
+    // getObjectives test method
+    @isTest
+    static void getObjectivesTest() {
+
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
+        User user = [SELECT Id FROM User WHERE Id =:UserInfo.getUserId() LIMIT 1];     
 
         Test.startTest();
         List<Objective__c> objectives = okrDashboardController.getObjectives(2026, user.Id);
@@ -85,25 +99,15 @@ private class okrDashboardControllerTest {
     // TARGET creation tests
     @isTest
     static void createTargetTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
 
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Name = 'Test Key Result',
-            Objective__c = obj.Id
-        );
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Key_Result__c keyResult2 = new Key_Result__c(
             Name = 'Test Key Result 2',
             Objective__c = obj.Id
         );
 
-        insert keyResult;
         insert keyResult2;
 
         Test.startTest();
@@ -142,26 +146,22 @@ private class okrDashboardControllerTest {
     @isTest
     static void createObjectiveTest() {
 
+
         Test.startTest();
-        okrDashboardController.createObjective('Test Objective', 2026, UserInfo.getUserId());
+        okrDashboardController.createObjective('Test Objective', 2027, UserInfo.getUserId());
         Test.stopTest();
 
-        List<Objective__c> objectives = [SELECT Id, Name, Year__c FROM Objective__c WHERE Year__c = 2026 AND OwnerId = :UserInfo.getUserId()];
+        List<Objective__c> objectives = [SELECT Id, Name, Year__c FROM Objective__c WHERE Year__c = 2027 AND OwnerId = :UserInfo.getUserId()];
 
         System.assertEquals(1, objectives.size());
         System.assertEquals('Test Objective', objectives[0].Name);
-        System.assertEquals(2026, objectives[0].Year__c);
+        System.assertEquals(2027, objectives[0].Year__c);
 
     }
 
     @isTest
     static void createObjectiveExistsTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
+        Objective__c obj = getObj();
 
         Boolean exceptionThrown = false;
 
@@ -186,15 +186,10 @@ private class okrDashboardControllerTest {
     // Key Result creation tests
     @isTest
     static void createKeyResultTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
+        Objective__c obj = getObj();
 
         Test.startTest();
-        okrDashboardController.createKeyResult(obj.Id, 'Test Key Result');
+        okrDashboardController.createKeyResult(obj.Id, 'Test Key Result 2');
         Test.stopTest();
 
         List<Key_Result__c> keyResults = [
@@ -203,25 +198,15 @@ private class okrDashboardControllerTest {
             WHERE Objective__c = :obj.Id
         ];
 
-        System.assertEquals(1, keyResults.size());
-        System.assertEquals('Test Key Result', keyResults[0].Name);
+        System.assertEquals(2, keyResults.size());
+        System.assertEquals('Test Key Result 2', keyResults[1].Name);
 
     }
 
     @isTest
     static void createKeyResultDuplicateTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Boolean exceptionThrown = false;
 
@@ -248,19 +233,9 @@ private class okrDashboardControllerTest {
     // Review creation tests
     @isTest
     static void createReviewTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
-        
         Test.startTest();
         okrDashboardController.createReview(keyResult.Id, 'Test Review');
         Test.stopTest();
@@ -277,18 +252,8 @@ private class okrDashboardControllerTest {
 
     @isTest
     static void createReviewDuplicateTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Review__c review = new Review__c(
             Key_Result__c = keyResult.Id,
@@ -323,18 +288,8 @@ private class okrDashboardControllerTest {
     // Survey creation tests
     @isTest
     static void createSurveyTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Test.startTest();
         okrDashboardController.createSurvey(keyResult.Id, 'Test Survey');
@@ -353,18 +308,8 @@ private class okrDashboardControllerTest {
 
     @isTest
     static void createSurveyDuplicateTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Survey__c survey = new Survey__c(
             Key_Result__c = keyResult.Id,
@@ -393,18 +338,8 @@ private class okrDashboardControllerTest {
     // Case Study creation tests
     @isTest
     static void createCaseStudyTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Test.startTest();
         okrDashboardController.createCaseStudy(keyResult.Id, 'Test Case Study');
@@ -419,18 +354,8 @@ private class okrDashboardControllerTest {
 
     @isTest
     static void createCaseStudyDuplicateTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Case_Study__c caseStudy = new Case_Study__c(
             Key_Result__c = keyResult.Id,
@@ -458,18 +383,8 @@ private class okrDashboardControllerTest {
     // Google Review creation tests
     @isTest
     static void createGoogleReviewTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Test.startTest();
         okrDashboardController.createGoogleReview(keyResult.Id, 'Test Google Review');
@@ -483,18 +398,8 @@ private class okrDashboardControllerTest {
 
     @isTest
     static void createGoogleReviewDuplicateTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
-
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
         Google_Review__c googleReview = new Google_Review__c(
             Key_Result__c = keyResult.Id,
@@ -519,21 +424,13 @@ private class okrDashboardControllerTest {
         System.assertEquals(1, googleReviews.size());
     }
 
+    // Test for getting targets
     @isTest
     static void getTargetsTest() {
-        Objective__c obj = new Objective__c(
-            Name = 'Test Objective',
-            Year__c = 2026,
-            OwnerId = UserInfo.getUserId()
-        );
-        insert obj;
+        Objective__c obj = getObj();
+        Key_Result__c keyResult = getKR();
 
-        Key_Result__c keyResult = new Key_Result__c(
-            Objective__c = obj.Id,
-            Name = 'Test Key Result'
-        );
-        insert keyResult;
-
+        // Targets
         List<Target__c> targets = new List<Target__c>{
             new Target__c(Key_Result__c = keyResult.Id, Type__c = 'Calls', Target_Number__c = 5),
             new Target__c(Key_Result__c = keyResult.Id, Type__c = 'Events', Target_Number__c = 5),
@@ -547,7 +444,7 @@ private class okrDashboardControllerTest {
         };
         insert targets;
 
-            // Calls
+        // Calls
         insert new Task(
             WhatId = keyResult.Id,
             Subject = 'Call test',

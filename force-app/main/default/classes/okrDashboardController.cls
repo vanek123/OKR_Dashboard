@@ -1,5 +1,5 @@
 public with sharing class okrDashboardController {
-
+    // 87% Coverage
     @AuraEnabled(cacheable=true)
     public static List<Objective__c> getObjectives(Integer year, Id userId) {
         try {

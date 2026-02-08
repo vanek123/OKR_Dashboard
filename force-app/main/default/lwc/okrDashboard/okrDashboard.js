@@ -192,6 +192,13 @@ export default class OkrDashboard extends LightningElement {
     
   }
 
+  refreshTargets() {
+    const keyResultComponents = this.template.querySelectorAll('c-key-result-child');
+    keyResultComponents.forEach(comp => {
+      comp.refreshTargets();
+    })
+  }
+
   handleObjectiveSave() {
     this.showObjectiveForm = false;
     this.objectiveRecordId = null;
@@ -245,6 +252,8 @@ export default class OkrDashboard extends LightningElement {
     this.showReviewForm = false;
     this.value = undefined;
 
+    this.refreshTargets();
+
     const evt = new ShowToastEvent({
       title: 'Success',
       message: 'The record was created successfully!',
@@ -262,6 +271,7 @@ export default class OkrDashboard extends LightningElement {
     this.showSurveyForm = false;
     this.value = undefined;
 
+    this.refreshTargets();
 
     const evt = new ShowToastEvent({
       title: 'Success',
@@ -280,6 +290,8 @@ export default class OkrDashboard extends LightningElement {
     this.showCaseStudyForm = false;
     this.value = undefined;
 
+    this.refreshTargets();
+
     const evt = new ShowToastEvent({
       title: 'Success',
       message: 'The record was created successfully!',
@@ -296,6 +308,8 @@ export default class OkrDashboard extends LightningElement {
   handleGoogleReviewSave() {
     this.showGoogleReviewForm = false;
     this.value = undefined;
+
+    this.refreshTargets();
 
     const evt = new ShowToastEvent({
       title: 'Success',

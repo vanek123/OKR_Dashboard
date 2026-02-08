@@ -66,9 +66,9 @@ export default class SurveyForm extends LightningElement {
 
         createSurvey({
             keyResultId: this.keyResultId,
-            surveyName: this.reviewName
+            surveyName: this.surveyName
         }).then(() => {
-            this.dispatchEvent(new CustomEvent('save', { bubbles: true }));
+            this.dispatchEvent(new CustomEvent('save', { bubbles: true}));
         })
         .catch(error => {
             this.dispatchEvent(

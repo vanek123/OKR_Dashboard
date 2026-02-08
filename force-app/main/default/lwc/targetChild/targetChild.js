@@ -79,6 +79,7 @@ export default class TargetChild extends LightningElement {
         })
         .then(() => {
             this.showTargetForm = false;
+
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
@@ -98,5 +99,10 @@ export default class TargetChild extends LightningElement {
             );
         });
         
+    }
+
+    @api
+    refreshData() {
+        return refreshApex(this.wiredTargets);
     }
 }

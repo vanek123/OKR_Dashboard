@@ -6,4 +6,12 @@ export default class KeyResultChild extends LightningElement {
     get name() {
         return this.keyResult.Name;
     }
+
+    @api
+    refreshTargets() {
+        const targetComp = this.template.querySelector('c-target-child');
+        if (targetComp) {
+            targetComp.refreshData();
+        }
+    }
 }
